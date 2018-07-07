@@ -28,7 +28,7 @@ extension URL {
 }
 
 extension Date {
-    func removeTime() -> String {
+    func convertToString() -> String {
         let stringDate = String("\(self)")
         var newDateCharacters = [Character]()
         for character in stringDate {
@@ -38,9 +38,8 @@ extension Date {
                 newDateCharacters.append(character)
             }
         }
-        let string = String(newDateCharacters)
-        print(string)
-        return string
+        let convertedDate = String(newDateCharacters)
+        return convertedDate
     }
 }
 

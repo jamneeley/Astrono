@@ -14,15 +14,12 @@ class APODController {
     
     var APODS = [APOD]()
     
-    func fetchAPODS(_ date: Date, completion: @escaping([APOD]?) -> Void) {
-        
+    func fetchAPODS(_ date: Date, completion: @escaping(APOD?) -> Void) {
         let queries = [
             "api_key": "TK7xNPR7Vxivh47QCyZjwKUsQMOxL3eqp1dgfWTO",
-            "date": "\(date.removeTime())"
+            "date": "\(date.convertToString())"
         ]
-        
         guard let url = baseURL?.withQueries(queries) else {return}
-        print(url)
         let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if let error = error {
@@ -33,10 +30,8 @@ class APODController {
             if let data = data {
                 do {
                     let jsonDecoder = JSONDecoder()
-                    let decodedData = try jsonDecoder.decode(APOD.self, from: data)
-                    let APODS = decodedData
-                    self.APODS = [APODS]
-                    completion([APODS])
+                    let apod = try jsonDecoder.decode(APOD.self, from: data)
+                    completion(apod)
                 } catch {
                     print("error decoding data \(error.localizedDescription)")
                     completion(nil)
