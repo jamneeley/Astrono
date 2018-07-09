@@ -32,11 +32,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let _ = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(reloadCollectionView), userInfo: nil, repeats: false)
         
-        APODController.shared.fetchAPODS(Date()) { (success) in
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+//        APODController.shared.fetchAPODS(Date()) { (success) in
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+//        }
     }
     @objc func reloadCollectionView() {
         collectionView.reloadData()
@@ -69,13 +69,21 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! APODCollectionViewCell
         let date = findDate(forIndexPath: indexPath.row)
         
-        APODController.shared.fetchAPODS(date) { (apod) in
+        
+        if let object = APODController.shared.checkObjects(forFileNamed: date) {
+            cell.astronomyObject = object
+            return cell
+        }
+        
+        
+        APODController.shared.fetchAPODWithDate(date) { (apod) in
             guard let apod = apod else {return}
             APODController.shared.fetchImage(forAPOD: apod) { (image) in
                 DispatchQueue.main.async {
                     guard let apodimage = image else {return}
                     cell.apodImage = apodimage
                     cell.apod = apod
+                    FileHelper.store(apodimage, apod: apod)
                 }
             }
         }

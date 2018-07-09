@@ -14,7 +14,16 @@ class APODController {
     
     var APODS = [APOD]()
     
-    func fetchAPODS(_ date: Date, completion: @escaping(APOD?) -> Void) {
+    func checkObjects(forFileNamed date: Date) -> AstronomyObject? {
+        if let astronomyObject = FileHelper.retrieve(objectForDate: date.convertToString()){
+            return astronomyObject
+        } else {
+            return nil
+        }
+    }
+    
+    func fetchAPODWithDate(_ date: Date, completion: @escaping(APOD?) -> ()) {
+        
         let queries = [
             "api_key": "TK7xNPR7Vxivh47QCyZjwKUsQMOxL3eqp1dgfWTO",
             "date": "\(date.convertToString())"

@@ -2,4 +2,54 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AstronomyPictureOfTheDay/ModelController/AstronomyObjectController.swift"
+            timestampString = "552867831.709422"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "init()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AstronomyPictureOfTheDay.AstronomyObjectController.__allocating_init() -&gt; AstronomyPictureOfTheDay.AstronomyObjectController"
+                  moduleName = "AstronomyPictureOfTheDay"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamesneeley801-452-1560/Desktop/IOSDevelopment%20/AppsOnStore/AstronomyPictureOfTheDay/AstronomyPictureOfTheDay/ModelController/AstronomyObjectController.swift"
+                  timestampString = "552867831.719038"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AstronomyPictureOfTheDay.AstronomyObjectController.init() -&gt; AstronomyPictureOfTheDay.AstronomyObjectController"
+                  moduleName = "AstronomyPictureOfTheDay"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamesneeley801-452-1560/Desktop/IOSDevelopment%20/AppsOnStore/AstronomyPictureOfTheDay/AstronomyPictureOfTheDay/ModelController/AstronomyObjectController.swift"
+                  timestampString = "552867831.72249"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

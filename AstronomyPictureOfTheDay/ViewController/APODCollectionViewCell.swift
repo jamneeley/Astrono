@@ -50,11 +50,27 @@ class APODCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var astronomyObject: AstronomyObject? {
+        didSet{
+            updateWithObject()
+        }
+    }
+    
     var apodImage: UIImage? {
         didSet {
             updateImage()
         }
     }
+    
+    func updateWithObject() {
+        guard let object = astronomyObject,
+        let image = UIImage(data: object.imageData)
+        else {return}
+        titleLabel.text = object.title
+        descriptionLabel.text = object.explanation
+        apodImageView.image = image
+    }
+    
     func updateImage() {
         guard let apodImage = apodImage else {return}
         apodImageView.image = apodImage

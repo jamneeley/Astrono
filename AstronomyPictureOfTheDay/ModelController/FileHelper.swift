@@ -9,6 +9,7 @@
 import UIKit
 
 class FileHelper {
+    
     static var fileManager = FileManager.default
     
     static var apodDirectory: URL {
@@ -24,34 +25,55 @@ class FileHelper {
         return apodDirectory
     }
     
-    static func fileURL(for apod: APOD) -> URL {
-        let fileName = "\(apod.date)"
-        let url = apodDirectory.appendingPathExtension(fileName)
+    
+    static func fileURL(for date: String) -> URL? {
+        let url = apodDirectory.appendingPathExtension("\(date)")
         return url
     }
     
     static func store(_ image: UIImage, apod: APOD) {
-        let fileURL = self.fileURL(for: apod)
-        guard fileManager.fileExists(atPath: fileURL.path) == false,
-            let data = UIImageJPEGRepresentation(image, 1)
+        let title = apod.title ?? ""
+        let explanation = apod.explanation ?? ""
+        let mediaType = apod.media_type ?? "image"
+        let copyright = apod.copyright ?? ""
+        guard let date = apod.date,
+        let fileURL = self.fileURL(for: date)
             else {return}
+        guard fileManager.fileExists(atPath: fileURL.path) == false,
+            let imageData = UIImageJPEGRepresentation(image, 1)
+            else {return}
+        let astrononomyObject = AstronomyObject(imageData: imageData, title: title, explanation: explanation, mediaType: mediaType, copyright: copyright, date: date)
+        
+        saveToPersistanceStore(object: astrononomyObject)
+    }
+    
+    static func saveToPersistanceStore(object: AstronomyObject) {
+        let jsonEncoder = JSONEncoder()
         do {
-            try data.write(to: fileURL)
-        } catch {
-            print("error saving to url \(fileURL.path)")
+            let encodeData = try jsonEncoder.encode(object)
+            guard let fileURL = fileURL(for: object.date) else {return}
+            try encodeData.write(to: fileURL)
+        } catch let error {
+            print("error saving \(error.localizedDescription)")
         }
     }
     
-    static func retrieve(ImageFor apod: APOD) -> UIImage? {
-        let fileURL = self.fileURL(for: apod)
-        guard let data = fileManager.contents(atPath: fileURL.path) else {
-            print("Couldn't retriece data for \(apod.date) as \(fileURL.path)")
-            return nil
+    static func retrieve(objectForDate date: String) -> AstronomyObject? {
+        guard let fileURL = self.fileURL(for: date) else {return nil}
+        let jsonDecoder = JSONDecoder()
+        do{
+            let encodedData = try Data(contentsOf: fileURL)
+            let astronomyObject =  try jsonDecoder.decode(AstronomyObject.self, from: encodedData)
+            return astronomyObject
+        } catch let error {
+            print("error loading \(error.localizedDescription)")
         }
-        let image = UIImage(data: data)
-        return image
+    
+        print("Couldn't retrieve data for \(date) at \(fileURL.path)")
+        return nil
     }
     
+    //Used for testing
     static func deleteAPODex() {
         do {
             try fileManager.removeItem(at: apodDirectory)
@@ -61,3 +83,7 @@ class FileHelper {
         }
     }
 }
+
+
+
+

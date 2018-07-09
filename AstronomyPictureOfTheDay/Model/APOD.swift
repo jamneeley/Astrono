@@ -15,7 +15,7 @@ struct APOD: Decodable {
     let explanation: String?
     let media_type: String?
     let copyright: String?
-    let date: String
+    let date: String?
     
 }
 
