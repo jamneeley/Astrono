@@ -15,11 +15,17 @@ class APODCollectionViewCell: UICollectionViewCell {
         return iV
     }()
     
+    private let webview: UIWebView = {
+       let wV = UIWebView()
+        return wV
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
         label.numberOfLines = 2
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
     
@@ -30,13 +36,6 @@ class APODCollectionViewCell: UICollectionViewCell {
         tV.backgroundColor = .clear
         return tV
     }()
-
-    private let activityIndicator: UIActivityIndicatorView = {
-       let aI = UIActivityIndicatorView()
-        aI.hidesWhenStopped = true
-        aI.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
-        return aI
-    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,12 +45,6 @@ class APODCollectionViewCell: UICollectionViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    var reset = false {
-        didSet{
-            resetViews()
-        }
     }
     
     var astronomyObject: AstronomyObject? {
@@ -72,15 +65,8 @@ class APODCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func resetViews() {
-        titleLabel.text = "Loading Image..."
-        addSubview(activityIndicator)
-        activityIndicator.center = center
-        activityIndicator.startAnimating()
-    }
-    
     func updateWithObject() {
-        stopAnimating()
+        setupImageView()
         guard let object = astronomyObject,
         let image = UIImage(data: object.imageData)
         else {return}
@@ -90,12 +76,12 @@ class APODCollectionViewCell: UICollectionViewCell {
     }
     
     func updateImage() {
+        setupImageView()
         guard let apodImage = apodImage else {return}
         apodImageView.image = apodImage
     }
     
     func updateViews() {
-        stopAnimating()
         guard let apod = apod else {return}
         if let title = apod.title {
             titleLabel.text = title
@@ -105,36 +91,66 @@ class APODCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func stopAnimating() {
-        if activityIndicator.isAnimating == true {
-            activityIndicator.stopAnimating()
+    func dismissWebView() {
+        if webview.superview == self {
+            webview.removeFromSuperview()
         }
     }
     
+    func dismissImageView() {
+        if apodImageView.superview == self {
+            apodImageView.removeFromSuperview()
+        }
+    }
+    
+    func showVideo(withURL url: URL) {
+        setupWebView()
+        webview.loadRequest(URLRequest(url: url))
+    }
+    
+    func setupWebView() {
+        if webview.superview == nil {
+            dismissImageView()
+            addSubview(webview)
+            webview.translatesAutoresizingMaskIntoConstraints = false
+            webview.topAnchor.constraint(equalTo: topAnchor, constant: 50).isActive = true
+            webview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+            webview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+            webview.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 50).isActive = true
+        }
+    }
+    
+    func setupImageView() {
+        if apodImageView.superview == nil {
+            dismissWebView()
+            addSubview(apodImageView)
+            apodImageView.translatesAutoresizingMaskIntoConstraints = false
+            apodImageView.topAnchor.constraint(equalTo: topAnchor, constant: 50).isActive = true
+            apodImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+            apodImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+            apodImageView.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 50).isActive = true
+        }
+    }
+    
+    
     func setupViews() {
-        addSubview(apodImageView)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         setupConstraints()
     }
     
     func setupConstraints() {
-        apodImageView.translatesAutoresizingMaskIntoConstraints = false
-        apodImageView.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        apodImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        apodImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        apodImageView.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 20).isActive = true
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: apodImageView.bottomAnchor, constant: 20).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: centerYAnchor, constant: 60).isActive = true
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: centerYAnchor, constant: 100).isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
+        descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.topAnchor.constraint(equalTo: centerYAnchor, constant: 60).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -10).isActive = true
     }
 }

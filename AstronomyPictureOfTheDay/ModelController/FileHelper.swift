@@ -41,7 +41,7 @@ class FileHelper {
         guard fileManager.fileExists(atPath: fileURL.path) == false,
             let imageData = UIImageJPEGRepresentation(image, 1)
             else {return}
-        let astrononomyObject = AstronomyObject(imageData: imageData, title: title, explanation: explanation, mediaType: mediaType, copyright: copyright, date: date)
+        let astrononomyObject = AstronomyObject(imageData: imageData, title: title, explanation: explanation, mediaType: mediaType, copyright: copyright, date: date, isFavorite: false)
         
         saveToPersistanceStore(object: astrononomyObject)
     }
@@ -66,20 +66,20 @@ class FileHelper {
             let astronomyObject =  try jsonDecoder.decode(AstronomyObject.self, from: encodedData)
             return astronomyObject
         } catch let error {
-            print("error loading \(error.localizedDescription)")
+            print("\(error.localizedDescription)")
         }
         return nil
     }
     
     //Used for testing
-    static func deleteAPODex() {
-        do {
-            try fileManager.removeItem(at: apodDirectory)
-            print("APODex deleted!")
-        }catch {
-            print("Failed to remove APODex \(error)")
-        }
-    }
+//    static func deleteAPODex() {
+//        do {
+//            try fileManager.removeItem(at: apodDirectory)
+//            print("APODex deleted!")
+//        }catch {
+//            print("Failed to remove APODex \(error)")
+//        }
+//    }
 }
 
 

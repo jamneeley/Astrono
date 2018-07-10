@@ -63,11 +63,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! APODCollectionViewCell
-        
-        cell.reset = true
-        
         let date = findDate(forIndexPath: indexPath.row)
-    
         if let object = APODController.shared.checkObjects(forFileNamed: date) {
             cell.astronomyObject = object
             return cell
@@ -77,16 +73,23 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             DispatchQueue.main.async {
                 cell.apod = apod
             }
-            APODController.shared.fetchImage(forAPOD: apod) { (image) in
-                DispatchQueue.main.async {
+            if apod.media_type == "image" {
+                APODController.shared.fetchImage(forAPOD: apod) { (image) in
                     guard let apodimage = image else {return}
-                    cell.apodImage = apodimage
-                    FileHelper.store(apodimage, apod: apod)
+                    DispatchQueue.main.async {
+                        cell.apodImage = apodimage
+                        FileHelper.store(apodimage, apod: apod)
+                    }
+                }
+            } else if apod.media_type == "video", let url = apod.url {
+                DispatchQueue.main.async {
+                    cell.showVideo(withURL: url)
                 }
             }
         }
         return cell
     }
+    
     
     func presentInternetAlert() {
         let alert = UIAlertController(title: "Uh Oh", message: "Astronomy picture couldnt load, check the connection and try again", preferredStyle: .alert)

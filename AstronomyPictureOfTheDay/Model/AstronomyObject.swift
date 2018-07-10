@@ -16,4 +16,5 @@ struct AstronomyObject: Codable {
     let mediaType: String
     let copyright: String
     let date: String
+    let isFavorite: Bool
 }

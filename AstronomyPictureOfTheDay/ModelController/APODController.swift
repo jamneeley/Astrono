@@ -6,6 +6,8 @@
 //  Copyright © 2018 JamesNeeley. All rights reserved.
 //
 import UIKit
+import AVFoundation
+
 class APODController {
     
     static let shared = APODController()
@@ -23,14 +25,13 @@ class APODController {
     }
     
     func fetchAPODWithDate(_ date: Date, completion: @escaping(APOD?) -> ()) {
-        
         let queries = [
             "api_key": "TK7xNPR7Vxivh47QCyZjwKUsQMOxL3eqp1dgfWTO",
             "date": "\(date.convertToString())"
         ]
         guard let url = baseURL?.withQueries(queries) else {return}
         let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
+            print(url)
             if let error = error {
                 print("error accessing url \(error.localizedDescription)")
                 completion(nil)
@@ -50,6 +51,21 @@ class APODController {
         }
         dataTask.resume()
     }
+    
+//    func fetchImage(forAPOD apod: APOD, completion: @escaping(UIImage?) ->Void) {
+//        guard let url = apod.url else {completion(nil); return}
+//        let dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+//            if let error = error {
+//                print("error accessing url \(error.localizedDescription)")
+//                completion(nil)
+//                return
+//            }
+//            if let data = data {
+//                let video =
+//            }
+//        }
+//        dataTask.resume()
+//    }
     
     func fetchImage(forAPOD apod: APOD, completion: @escaping(UIImage?) ->Void) {
         guard let url = apod.url else {completion(nil); return}

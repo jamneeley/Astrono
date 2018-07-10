@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         let main = MainViewController()
         window?.rootViewController = main
-        FileHelper.deleteAPODex()
         return true
     }
     
