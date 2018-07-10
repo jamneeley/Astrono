@@ -31,16 +31,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         collectionView.register(APODCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         let _ = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(reloadCollectionView), userInfo: nil, repeats: false)
-        
-//        APODController.shared.fetchAPODS(Date()) { (success) in
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
-//        }
+
     }
     @objc func reloadCollectionView() {
         collectionView.reloadData()
     }
+    
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -67,31 +63,37 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! APODCollectionViewCell
+        
+        cell.reset = true
+        
         let date = findDate(forIndexPath: indexPath.row)
-        
-        
+    
         if let object = APODController.shared.checkObjects(forFileNamed: date) {
             cell.astronomyObject = object
             return cell
         }
-        
-        
         APODController.shared.fetchAPODWithDate(date) { (apod) in
             guard let apod = apod else {return}
+            DispatchQueue.main.async {
+                cell.apod = apod
+            }
             APODController.shared.fetchImage(forAPOD: apod) { (image) in
                 DispatchQueue.main.async {
                     guard let apodimage = image else {return}
                     cell.apodImage = apodimage
-                    cell.apod = apod
                     FileHelper.store(apodimage, apod: apod)
                 }
             }
         }
-        
         return cell
     }
     
-    
+    func presentInternetAlert() {
+        let alert = UIAlertController(title: "Uh Oh", message: "Astronomy picture couldnt load, check the connection and try again", preferredStyle: .alert)
+        let dismiss = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+        alert.addAction(dismiss)
+        self.present(alert, animated: true, completion: nil)
+    }
     func findDate(forIndexPath index: Int) -> Date {
         let date = Date()
         if index == 0 {

@@ -19,12 +19,11 @@ class FileHelper {
             do {
                 try fileManager.createDirectory(at: apodDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("error - failed to create firectory \(error.localizedDescription)")
+                print("error - failed to create directory \(error.localizedDescription)")
             }
         }
         return apodDirectory
     }
-    
     
     static func fileURL(for date: String) -> URL? {
         let url = apodDirectory.appendingPathExtension("\(date)")
@@ -53,6 +52,7 @@ class FileHelper {
             let encodeData = try jsonEncoder.encode(object)
             guard let fileURL = fileURL(for: object.date) else {return}
             try encodeData.write(to: fileURL)
+            print("Saved item at \(object.date) at \(fileURL)")
         } catch let error {
             print("error saving \(error.localizedDescription)")
         }
@@ -68,8 +68,6 @@ class FileHelper {
         } catch let error {
             print("error loading \(error.localizedDescription)")
         }
-    
-        print("Couldn't retrieve data for \(date) at \(fileURL.path)")
         return nil
     }
     
@@ -77,7 +75,7 @@ class FileHelper {
     static func deleteAPODex() {
         do {
             try fileManager.removeItem(at: apodDirectory)
-            
+            print("APODex deleted!")
         }catch {
             print("Failed to remove APODex \(error)")
         }

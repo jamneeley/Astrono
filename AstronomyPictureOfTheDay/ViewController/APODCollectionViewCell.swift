@@ -12,7 +12,6 @@ class APODCollectionViewCell: UICollectionViewCell {
     
     private let apodImageView: UIImageView = {
         let iV = UIImageView()
-        iV.image = #imageLiteral(resourceName: "space")
         return iV
     }()
     
@@ -21,7 +20,6 @@ class APODCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .white
         label.numberOfLines = 2
-        label.text = "(Title)"
         return label
     }()
     
@@ -29,24 +27,30 @@ class APODCollectionViewCell: UICollectionViewCell {
         let tV = UITextView()
         tV.textAlignment = .left
         tV.textColor = .white
-        tV.text = "(Description)"
         tV.backgroundColor = .clear
         return tV
+    }()
+
+    private let activityIndicator: UIActivityIndicatorView = {
+       let aI = UIActivityIndicatorView()
+        aI.hidesWhenStopped = true
+        aI.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
+        return aI
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        backgroundColor = Colors.plutoBlue
+        backgroundColor = Colors.spaceGrey
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var apod: APOD? {
-        didSet {
-            updateViews()
+    var reset = false {
+        didSet{
+            resetViews()
         }
     }
     
@@ -56,13 +60,27 @@ class APODCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var apod: APOD? {
+        didSet {
+            updateViews()
+        }
+    }
+    
     var apodImage: UIImage? {
         didSet {
             updateImage()
         }
     }
     
+    func resetViews() {
+        titleLabel.text = "Loading Image..."
+        addSubview(activityIndicator)
+        activityIndicator.center = center
+        activityIndicator.startAnimating()
+    }
+    
     func updateWithObject() {
+        stopAnimating()
         guard let object = astronomyObject,
         let image = UIImage(data: object.imageData)
         else {return}
@@ -77,12 +95,19 @@ class APODCollectionViewCell: UICollectionViewCell {
     }
     
     func updateViews() {
+        stopAnimating()
         guard let apod = apod else {return}
         if let title = apod.title {
             titleLabel.text = title
         }
         if let description = apod.explanation {
             descriptionLabel.text = description
+        }
+    }
+    
+    func stopAnimating() {
+        if activityIndicator.isAnimating == true {
+            activityIndicator.stopAnimating()
         }
     }
     

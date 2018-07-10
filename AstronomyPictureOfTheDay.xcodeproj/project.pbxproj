@@ -18,7 +18,6 @@
 		9D27BDA120EFEAC500A84AE0 /* space.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9D27BDA020EFEAC500A84AE0 /* space.jpg */; };
 		9D27BDA320EFEC3A00A84AE0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D27BDA220EFEC3A00A84AE0 /* Colors.swift */; };
 		9D27BDA520F03B1300A84AE0 /* AstronomyObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D27BDA420F03B1300A84AE0 /* AstronomyObject.swift */; };
-		9D27BDA720F03B8D00A84AE0 /* AstronomyObjectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D27BDA620F03B8D00A84AE0 /* AstronomyObjectController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +34,6 @@
 		9D27BDA020EFEAC500A84AE0 /* space.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = space.jpg; sourceTree = "<group>"; };
 		9D27BDA220EFEC3A00A84AE0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		9D27BDA420F03B1300A84AE0 /* AstronomyObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyObject.swift; sourceTree = "<group>"; };
-		9D27BDA620F03B8D00A84AE0 /* AstronomyObjectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyObjectController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +99,6 @@
 		9D27BD9420EFE9C900A84AE0 /* ModelController */ = {
 			isa = PBXGroup;
 			children = (
-				9D27BDA620F03B8D00A84AE0 /* AstronomyObjectController.swift */,
 				9D27BD9820EFE9F000A84AE0 /* APODController.swift */,
 				9D27BD9A20EFE9F700A84AE0 /* FileHelper.swift */,
 			);
@@ -190,7 +187,6 @@
 			files = (
 				9D27BD9D20EFEA0500A84AE0 /* APODCollectionViewCell.swift in Sources */,
 				9D27BD8120EFE9AE00A84AE0 /* AppDelegate.swift in Sources */,
-				9D27BDA720F03B8D00A84AE0 /* AstronomyObjectController.swift in Sources */,
 				9D27BD9720EFE9E800A84AE0 /* APOD.swift in Sources */,
 				9D27BDA520F03B1300A84AE0 /* AstronomyObject.swift in Sources */,
 				9D27BDA320EFEC3A00A84AE0 /* Colors.swift in Sources */,
